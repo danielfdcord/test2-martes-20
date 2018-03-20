@@ -18,7 +18,21 @@ public class SensorTemperatura {
      * @return cantidad de minutos 
      */
     public static int tiempoDeEstabilizacion(float[] muestrasSensor, float temperaturaDeseada){
-        return -1;
+        int index=0;
+        int cant_min;
+        for (int i =0;i<muestrasSensor.length;i++){
+            do {
+                index=index+i;
+            }
+            while ((muestrasSensor[i]>=temperaturaDeseada-0.25)&&(muestrasSensor[i]<=temperaturaDeseada+0.25));       
+        }
+        cant_min=(index+1)*2;
+        
+        if (cant_min!=0){
+            return cant_min;
+        }
+        
+        return 0;
     }
     
     /**
@@ -31,7 +45,30 @@ public class SensorTemperatura {
      * @return arreglo SIN muestras erroneas.
      * 
      */
-    public static float[] quitarMuestrasErroneas(float[] muestrasSensor){
-        return null;
-    }
+    
+      public static float[] quitarMuestrasErroneas(float[] muestrasSensor){
+            float prom=0f;
+            int index=0;
+            
+            for (int i=3;i<muestrasSensor.length;i++){
+                
+              prom=((muestrasSensor[i-3]+muestrasSensor[i-2]+muestrasSensor[i-1])/3);
+                
+                if ((muestrasSensor[i]<prom-5)||(muestrasSensor[i]>prom+5)){
+                index++;
+                muestrasSensor[i]=0;
+                }   
+            }
+            float nuevaMuestra[]=new float [muestrasSensor.length-index];
+            
+            for (int i=0;i<nuevaMuestra.length;i++){
+                if (muestrasSensor[i]!=0){
+                    nuevaMuestra[i]=muestrasSensor[i];
+                }    
+            }
+            return nuevaMuestra;
+         }
+    
+   
 }
+    
